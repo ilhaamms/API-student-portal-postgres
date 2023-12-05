@@ -51,11 +51,18 @@ func (s *studentRepoImpl) Update(id int, student *model.Student) error {
 		}).Error
 		kalau pake model, maka diisi table nya apa dengan menggunakan struct
 	*/
-	err := s.db.Model(&model.Student{}).Where("id = ?", id).Updates(map[string]interface{}{
+
+	err := s.db.Where("id = ?", id).First(&student).Error
+	if err != nil {
+		return err
+	}
+
+	err = s.db.Model(&model.Student{}).Where("id = ?", id).Updates(map[string]interface{}{
 		"name":     student.Name,
 		"address":  student.Address,
 		"class_id": student.ClassId,
 	}).Error
+
 	if err != nil {
 		return err
 	}
@@ -67,7 +74,13 @@ kalau mau delete berdasarkan primary key tinggal pake delete aja langsung
 tapi kalau bukan berdasarkan primary key maka pake where diawalnyaa
 */
 func (s *studentRepoImpl) Delete(id int) error {
-	err := s.db.Delete(&model.Student{}, id).Error
+
+	err := s.db.Where("id = ?", id).First(&model.Student{}).Error
+	if err != nil {
+		return err
+	}
+
+	err = s.db.Delete(&model.Student{}, id).Error
 	if err != nil {
 		return err
 	}

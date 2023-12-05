@@ -2,6 +2,7 @@ package repository
 
 import (
 	"a21hc3NpZ25tZW50/model"
+	"errors"
 
 	"gorm.io/gorm"
 )
@@ -28,7 +29,7 @@ func (u *userRepository) Add(user model.User) error {
 		create ini untuk insert data
 	*/
 	if result := u.db.Create(&user); result.Error != nil {
-		return result.Error
+		return errors.New("username sudah terdaftar")
 	}
 	return nil
 }

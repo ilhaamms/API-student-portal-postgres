@@ -10,7 +10,6 @@ type UserService interface {
 	Register(user model.User) error
 
 	CheckPassLength(pass string) bool
-	CheckPassAlphabet(pass string) bool
 }
 
 type userService struct {
@@ -45,13 +44,4 @@ func (s *userService) CheckPassLength(pass string) bool {
 	}
 
 	return false
-}
-
-func (s *userService) CheckPassAlphabet(pass string) bool {
-	for _, charVariable := range pass {
-		if (charVariable < 'a' || charVariable > 'z') && (charVariable < 'A' || charVariable > 'Z') {
-			return false
-		}
-	}
-	return true
 }

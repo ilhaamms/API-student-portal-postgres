@@ -24,6 +24,7 @@ func NewStudentService(studentRepository repository.StudentRepository) StudentSe
 
 func (s *studentService) FetchAll() ([]model.Student, error) {
 	students, err := s.studentRepository.FetchAll()
+
 	if err != nil {
 		return nil, err
 	}
