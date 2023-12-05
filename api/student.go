@@ -166,8 +166,17 @@ func (api *API) Deletestudent(w http.ResponseWriter, r *http.Request) {
 
 func (api *API) FetchStudentWithClass(w http.ResponseWriter, r *http.Request) {
 	studentClasses, err := api.studentService.FetchWithClass()
-	if err != nil {
+	if len(*studentClasses) == 0 {
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(model.ErrorResponse{Error: "Data student kosong"})
+		return
+	}
+
+	if err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(model.ErrorResponse{Error: err.Error()})
 		return
 	}
 

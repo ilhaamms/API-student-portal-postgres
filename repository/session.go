@@ -31,10 +31,6 @@ func (s *sessionsRepoImpl) AddSessions(session model.Session) error {
 }
 
 func (s *sessionsRepoImpl) DeleteSession(token string) error {
-	/*
-		where dulu baru delete
-		dan tabel yang mana yang mau di deletenyaa
-	*/
 	session := model.Session{}
 	if result := s.db.Where("token = ? ", token).Delete(&session); result.Error != nil {
 		return result.Error
