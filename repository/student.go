@@ -40,20 +40,18 @@ func (s *studentRepoImpl) Store(student *model.Student) error {
 }
 
 func (s *studentRepoImpl) Update(id int, student *model.Student) error {
-	err := s.db.Where("id = ?", id).First(&student).Error
+	// Find the student with the given ID
+	err := s.db.First(&model.Student{}, id).Error
 	if err != nil {
 		return err
 	}
 
-	err = s.db.Model(&model.Student{}).Where("id = ?", id).Updates(map[string]interface{}{
-		"name":     student.Name,
-		"address":  student.Address,
-		"class_id": student.ClassId,
-	}).Error
-
+	// Update the student data
+	err = s.db.Model(&model.Student{}).Where("id = ?", id).Updates(student).Error
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -85,6 +83,7 @@ func (s *studentRepoImpl) FetchWithClass() (*[]model.StudentClass, error) {
 	s.db.Table("students").
 		Select("students.name AS name, students.address AS address, classes.name AS class_name, classes.professor AS professor, classes.room_number AS room_number").
 		Joins("INNER JOIN classes ON classes.id = students.class_id").
+		Where("students.deleted_at IS NULL").
 		Scan(&result)
 	return &result, nil
 }
