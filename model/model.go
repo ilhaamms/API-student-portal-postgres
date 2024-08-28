@@ -57,3 +57,7 @@ type SuccessResponse struct {
 	Username string `json:"username"`
 	Message  string `json:"message"`
 }
+
+type SuccessResponseDelete struct {
+	Message string `json:"message"`
+}
